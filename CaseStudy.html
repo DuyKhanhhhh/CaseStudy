@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./bootstrap-5.1.3-dist/bootstrap-5.1.3-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <style>
+        h1 {
+            text-align: center;
+            font-family: 'Franklin Gothic Medium';
+        }
+
+        body {
+            background-image: repeating-radial-gradient(#067346, #C2D3CB);
+        }
+
+        #left {
+            float: left;
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Danh Sách Sinh Viên</h1>
+
+    <div class="container">
+        <div class="mb-3">
+            <label class="form-label">
+                <h6>Mã Sinh Viên</h6>
+            </label>
+            <input type="number" class="form-control" id="id" placeholder="Nhập Mã Sinh Viên">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                <h6>Tên Học Sinh</h6>
+            </label>
+            <input type="text" class="form-control" id="name" placeholder="Nhập Tên">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                <h6>Email</h6>
+            </label>
+            <input type="email" class="form-control" id="email" placeholder="Nhập Email">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">
+                <h6>Lớp</h6>
+            </label>
+            <select id="class" class="form-select">
+                <option>~Choose class~</option>
+                <option>IBSK1D1</option>
+                <option>IBSK1D2</option>
+            </select>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col - 6">
+                    <button type="submit" class="btn btn-success" onclick="addSubmit()">Submit</button>
+                </div>
+                <div class="col - 6">
+                    <button onclick="search()" class="btn btn-success" id="left">Search</button>
+                    <input type="text" id="searchItem" class="form-control" placeholder="Search">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <table class="table" id="render">
+            <thead>
+                <tr>
+                    <th>Mã Sinh Viên</th>
+                    <th>Tên Học Sinh</th>
+                    <th>Email</th>
+                    <th>Lớp</th>
+                    <th>Acctions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+<script>
+
+    var data = [];
+
+    //add
+    function addSubmit() {
+        var item_name = document.getElementById("name").value;
+        var item_id = document.getElementById("id").value;
+        var item_email = document.getElementById("email").value;
+        var item_class = document.getElementById("class").value;
+
+
+
+        if (item_name == "" || item_id == "" || item_class == "" || item_email == "") {
+            alert("Nguu Hãy Nhập Vào")
+        } else {
+            var item = {
+                Id: item_id,
+                Name: item_name,
+                Email: item_email,
+                Class: item_class,
+            }
+            let index = data.findIndex((c) => c.Id == item.Id)
+
+            if (index >= 0) {
+                data.splice(index, 1, item)
+            } else {
+                data.push(item)
+            }
+
+            render()
+            clear()
+
+        }
+    }
+
+    function render() {
+        //In Gia
+        table = `<tr>
+                    <th>Mã Sinh Viên</th>
+                    <th>Tên Học Sinh</th>
+                    <th>Email</th>
+                    <th>Lớp</th>
+                    <th>Acctions</th>
+                </tr>`
+
+        for (let i = 0; i < data.length; i++) {
+            table += `<tr>
+                    <td>${data[i].Id}</td>
+                    <td>${data[i].Name}</td>
+                    <td>${data[i].Email}</td>
+                    <td>${data[i].Class}</td>
+                    <th><button onclick="deleteItem(${data[i].Id})" class="btn btn-success"><i class="fa-solid fa-trash-can"></i></button>
+                    <button onclick="editItem(${data[i].Id})" class="btn btn-success" ><i class="fa-solid fa-pen-to-square"></i></button></th>
+                </tr>`
+        }
+        document.getElementById("render").innerHTML = table
+        //In theo gia giống table
+    }
+
+    //Khi Nhập Vào sẽ xóa
+    function clear() {
+        document.getElementById("name").value = ""
+        document.getElementById("id").value = ""
+        document.getElementById("email").value = ""
+        document.getElementById("class").value = "~Choose class~"
+    }
+
+    // Xóa
+    function deleteItem(x) {
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].Id == x) {
+                data.splice(i, 1)
+                render()
+            }
+        }
+        if (deleteItem) {
+            alert ("Bạn Có Muốn Xóa")
+        }
+    }
+
+    // Sửa
+    function editItem(x) {
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].Id == x) {
+                document.getElementById("name").value = data[i].Name;
+                document.getElementById("id").value = data[i].Id;
+                document.getElementById("class").value = data[i].Class;
+                document.getElementById("email").value = data[i].Email;
+            }
+        }
+        if (editItem){
+            alert ("Bạn Có Muốn Sửa");
+        }
+    }
+
+    //Tim Kiem
+    function search() {
+        var search = document.getElementById("searchItem").value;
+        var list = this.data;
+        var kq = []
+
+        if (search) {
+            for (let i = 0; i < list.length; i++) {
+                var str = list[i].Name;
+                if (str.includes(search))
+                
+                    var itemSearch = {
+                        Id: list[i].Id,
+                        Name: list[i].Name,
+                        Email: list[i].Email,
+                        Class: list[i].Class,
+                    }
+
+            }
+
+            kq.push(itemSearch)
+
+            table = `<tr>
+                    <th>Mã Sinh Viên</th>
+                    <th>Tên Học Sinh</th>
+                    <th>Email</th>
+                    <th>Lớp</th>
+                </tr>`
+
+            for (let i = 0; i < kq.length; i++) {
+                table += `<tr>
+                    <td>${kq[i].Id}</td>
+                    <td>${kq[i].Name}</td>
+                    <td>${kq[i].Email}</td>
+                    <td>${kq[i].Class}</td>
+                </tr>`
+            }
+            document.getElementById("render").innerHTML = table
+        }
+    }
+
+
+</script>
+
+</html>
