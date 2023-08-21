@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.casechat.ClientController">
+    <children>
+        <Label layoutX="190.0" layoutY="25.0" prefHeight="36.0" prefWidth="239.0" text="Message Client">
+            <font>
+                <Font size="30.0" />
+            </font>
+        </Label>
+
+        <Button onAction="#buttonSend" layoutX="474.0" layoutY="422.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="97.0" text="Send" />
+
+        <TextField fx:id="tfMessage" layoutX="44.0" layoutY="422.0" prefHeight="36.0" prefWidth="424.0" />
+        <Label fx:id="label" layoutX="46.0" layoutY="82.0" prefHeight="324.0" prefWidth="521.0" />
+    </children>
+</AnchorPane>
