@@ -18,50 +18,42 @@ import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-public class ServerController{
+public class ServerController implements Initializable{
     @FXML
     private Label label;
     @FXML
     private TextField tfMessage;
     @FXML
-    public void buttonSend(ActionEvent event) throws IOException, SQLException {
-            ServerController serverController = new ServerController();
-            Socket socket = serverController.socket();
-            ImportToDataBase importToDataBase = new ImportToDataBase();
-            String textMessage = tfMessage.getText();
-            SendMessageToClient(socket,textMessage);
-            importToDataBase.addDatabase("Server", textMessage);
-            if (textMessage.equalsIgnoreCase("exit")){
-                importToDataBase.deleteData();
-            }
-            ReadFromClient(socket);
-            StringBuilder listMessage = importToDataBase.ReadMessageToDatabase();
-            label.setText(String.valueOf(listMessage));
-            tfMessage.setText("");
-
+    private Button buttonSend;
+    private Server server;
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            server = new Server(new ServerSocket(8080));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        buttonSend.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try {
+                        String textMessage = tfMessage.getText();
+                        server.SendMessageToClient(textMessage);
+                        server.readFromClient(label);
+                        ImportToDataBase importToDataBase = new ImportToDataBase();
+                        importToDataBase.addDatabase("Server", textMessage);
+                        if (textMessage.equalsIgnoreCase("exit")){
+                            importToDataBase.deleteData();
+                        }
+                        StringBuilder listMessage = importToDataBase.ReadMessageToDatabase();
+                        label.setText(String.valueOf(listMessage));
+                        tfMessage.clear();
+                    }catch (IOException e){
+                        System.out.println(e);
+                    }catch (SQLException e){
+                        System.out.println(e);
+                    }
+                }
+            });
     }
-    public Socket socket() throws IOException {
-        int port = 8080;
-        ServerSocket serverSocket = new ServerSocket(port);
-        Socket socket = serverSocket.accept();
-        System.out.println("Server Open");
-        return socket;
-    }
-
-    public static String SendMessageToClient(Socket socket, String message) throws IOException {
-        OutputStream outputStream = socket.getOutputStream();
-        String byteMessage = message;
-        outputStream.write(byteMessage.getBytes());
-        outputStream.flush();
-        return byteMessage;
-    }
-
-    public static String  ReadFromClient(Socket socket) throws IOException {
-        InputStream inputStream = socket.getInputStream();
-        byte[] list = new byte[1024];
-        int read = inputStream.read(list);
-        String message = new String(list, 0, read);
-        return message;
-    }
-
 }

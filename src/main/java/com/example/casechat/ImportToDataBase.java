@@ -28,10 +28,10 @@ public class ImportToDataBase {
         ResultSet resultSet = statement.executeQuery(query);
         StringBuilder stringBuilder = new StringBuilder();
         while (resultSet.next()){
+            String name = resultSet.getString("name");
             String message = resultSet.getString("Message");
-            stringBuilder.append(message + "\n");
+            stringBuilder.append(name + ": " + message + "\n");
         }
-        System.out.println(stringBuilder);
         return stringBuilder;
     }
     public void deleteData() throws SQLException {
@@ -40,12 +40,5 @@ public class ImportToDataBase {
         Statement statement = connection.createStatement();
         statement.executeUpdate(query);
     }
-
-//    public static void main(String[] args) throws SQLException {
-//        ImportToDataBase importToDataBase = new ImportToDataBase();
-//        importToDataBase.addDatabase("Client" , "A213");
-//        importToDataBase.ReadMessageToDatabase();
-//
-//    }
 
 }
