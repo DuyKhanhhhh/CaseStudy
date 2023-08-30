@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -19,9 +20,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class ClientController implements Initializable{
+public class ClientController implements Initializable {
     @FXML
-    private Label label;
+    private TextArea label;
     @FXML
     private TextField tfMessage;
     @FXML
@@ -55,6 +56,16 @@ public class ClientController implements Initializable{
                 }
             }
         });
+    }
+
+    public void delete(ActionEvent event) {
+        try {
+            ImportToDataBase importToDataBase = new ImportToDataBase();
+            importToDataBase.deleteData();
+            label.clear();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
 

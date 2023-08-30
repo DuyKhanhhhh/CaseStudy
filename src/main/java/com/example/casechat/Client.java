@@ -1,6 +1,7 @@
 package com.example.casechat;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -32,7 +33,7 @@ public class Client {
             e.printStackTrace();
         }
     }
-    public void readFromServer (Label label){
+    public void readFromServer (TextArea label){
         new Thread(() -> {
             while (socket.isConnected())
                 try {

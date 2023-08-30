@@ -21,6 +21,7 @@ public class ImportToDataBase {
         preparedStatement.close();
         connection.close();
     }
+
     public StringBuilder ReadMessageToDatabase() throws SQLException {
         Connection connection = ImportToDataBase.connection();
         String query = "SELECT * FROM DataMessage";
