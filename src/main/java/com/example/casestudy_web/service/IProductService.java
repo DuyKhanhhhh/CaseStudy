@@ -10,4 +10,5 @@ public interface IProductService {
     boolean deleteProduct(int id);
     List<Product> selectAllProduct();
     void insertProduct(Product product);
+    boolean updateProduct(Product user);
 }

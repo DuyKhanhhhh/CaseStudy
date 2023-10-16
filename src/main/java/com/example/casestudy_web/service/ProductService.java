@@ -15,6 +15,7 @@ public class ProductService implements IProductService {
     private static final String SEARCH_PRODUCT_BY_NAME = "select name,price,img from sneaker where name like ?";
     private static final String DELETE_PRODUCT_SQL = "delete from sneaker where id = ?";
     private static final String INSERT_PRODUCT = "insert into sneaker (name, price, img)values (?,?,?)";
+    private static final String UPDATE_PRODUCT = "update sneaker set name = ?, price = ?, img = ?  where id = ?";
 
     protected Connection getConnection() {
         Connection connection = null;
@@ -63,6 +64,23 @@ public class ProductService implements IProductService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public boolean updateProduct(Product user) {
+        boolean rowUpdate;
+        try {
+            Connection connection = getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCT);
+            preparedStatement.setString(1,user.getName());
+            preparedStatement.setString(2,user.getPrice());
+            preparedStatement.setString(3,user.getImg());
+            preparedStatement.setInt(4,user.getId());
+            rowUpdate = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return rowUpdate;
     }
 
     @Override

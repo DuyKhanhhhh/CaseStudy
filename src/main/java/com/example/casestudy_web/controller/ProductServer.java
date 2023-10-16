@@ -34,12 +34,32 @@ public class ProductServer extends HttpServlet {
             case "create":
                 insertProduct(request,response);
                 break;
+            case "edit":
+                updateProduct(request,response);
+                break;
             case "search":
                 searchProduct(request,response);
                 break;
         }
 
     }
+
+    private void updateProduct(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String price = request.getParameter("price");
+        String img = request.getParameter("img");
+        Product listProduct = new Product(id,name,price,img);
+        product.updateProduct(listProduct);
+        try {
+            request.getRequestDispatcher("view/admin.jsp").forward(request,response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void searchProduct(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         List<Product> listProduct = product.searchProduct(name);
@@ -81,11 +101,40 @@ public class ProductServer extends HttpServlet {
             case "add":
                 showCart(request,response);
                 break;
+            case "edit":
+                showEdit(request,response);
+            case"admin":
+                showAdmin(request,response);
             default:
                 showProduct(request,response);
                 break;
         }
 
+    }
+
+    private void showEdit(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Product newProduct = product.selectProduct(id);
+        request.setAttribute("product",newProduct);
+        try {
+            request.getRequestDispatcher("view/edit.jsp").forward(request,response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void showAdmin(HttpServletRequest request, HttpServletResponse response) {
+        List<Product> listProduct = product.selectAllProduct();
+        request.setAttribute("listProduct", listProduct);
+        try {
+            request.getRequestDispatcher("view/admin.jsp").forward(request,response);
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void createProduct(HttpServletRequest request, HttpServletResponse response) {
@@ -102,7 +151,7 @@ public class ProductServer extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         try {
             product.deleteProduct(id);
-            request.getRequestDispatcher("view/list.jsp").forward(request, response);
+            request.getRequestDispatcher("/product?action=admin").forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

@@ -134,7 +134,7 @@
     <div id="head">
         <nav class=" navbar bg-body-tertiary">
             <div class="container">
-                <a href="view/admin.jsp">
+                <a href="/product?action=admin">
                     <img
                             src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/sneaker-store-logo-brand-logo-design-template-ea9c8040d69fa064feee3014cb8e9827_screen.jpg?ts=1645976739"
                             alt="Logo" width="100px" height="80px" style="float: left">
